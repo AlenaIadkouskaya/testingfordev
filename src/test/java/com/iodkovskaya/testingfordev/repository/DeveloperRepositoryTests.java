@@ -4,6 +4,7 @@ import com.iodkovskaya.testingfordev.entity.DeveloperEntity;
 import com.iodkovskaya.testingfordev.util.DataUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.util.CollectionUtils;
@@ -11,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @DataJpaTest
 public class DeveloperRepositoryTests {
@@ -56,11 +58,11 @@ public class DeveloperRepositoryTests {
         DeveloperEntity developerToSave = DataUtils.getFirstDeveloperWithoutId();
         developerRepository.save(developerToSave);
         //when
-        DeveloperEntity foundedDeveloper = developerRepository.findById(developerToSave.getId())
+        DeveloperEntity foundDeveloper = developerRepository.findById(developerToSave.getId())
                 .orElse(null);
         //then
-        assertThat(foundedDeveloper).isNotNull();
-        assertThat(foundedDeveloper.getEmail()).isEqualTo("john.doe@gmail.com");
+        assertThat(foundDeveloper).isNotNull();
+        assertThat(foundDeveloper.getEmail()).isEqualTo("john.doe@gmail.com");
     }
 
     @Test
@@ -92,10 +94,10 @@ public class DeveloperRepositoryTests {
         DeveloperEntity developer = DataUtils.getFirstDeveloperWithoutId();
         developerRepository.save(developer);
         //when
-        DeveloperEntity foundedDeveloper = developerRepository.findByEmail(developer.getEmail());
+        DeveloperEntity foundDeveloper = developerRepository.findByEmail(developer.getEmail());
         //then
-        assertThat(foundedDeveloper).isNotNull();
-        assertThat(foundedDeveloper.getEmail()).isEqualTo(developer.getEmail());
+        assertThat(foundDeveloper).isNotNull();
+        assertThat(foundDeveloper.getEmail()).isEqualTo(developer.getEmail());
     }
 
     @Test
@@ -121,7 +123,9 @@ public class DeveloperRepositoryTests {
         //when
         developerRepository.deleteById(1);
         //then
-        DeveloperEntity developerFounded = developerRepository.findById(developer.getId()).orElse(null);
-        assertThat(developerFounded).isNull();
+        DeveloperEntity developerFound = developerRepository.findById(developer.getId()).orElse(null);
+        assertThat(developerFound).isNull();
     }
+
+
 }
